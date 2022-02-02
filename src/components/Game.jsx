@@ -19,11 +19,16 @@ const Game = () => {
         const squares = [...current];
         // If user click an occupied square or if game is won, return
         if (winner || squares[i]) return;
+     
         // Put an X or an O in the clicked square
         squares[i] = xIsNext ? 'X' : 'O';
+       
         setHistory([...timeInHistory, squares]);
-        setStepNumber(timeInHistory.length);        
+       
+        setStepNumber(timeInHistory.length); 
+        
         setXisNext(!xIsNext);
+        if(timeInHistory.length > 9) return 'Tie'    
     }
 
     const jumpTo = step => {
@@ -33,7 +38,9 @@ const Game = () => {
 
     const renderMoves = () => (
         history.map((_step, move) => {
+            
             const destination = move ? `Go to move#${move}` : 'Go to start';
+        
             return (
                 <li className="historyButton" key={move}>
                     <button onClick={() => jumpTo(move)}>{destination}</button>
@@ -41,12 +48,13 @@ const Game = () => {
             )
         })        
     )
-
+    console.log(history.length)
     return (
         <>
             <Board squares={history[stepNumber]} onClick={handleClick} />
             <div style={styles}>
-                {winner ? `Winner: ${winner}` : `Next Player: ${xIsNext ? 'X' : 'O'}`}
+                
+                {!winner && history.length > 9 ? 'Tie!' : winner ? `Winner: ${winner}` : `Next Player: ${xIsNext ? 'X' : 'O'}`}
                 {renderMoves()}
             </div>
         </>
